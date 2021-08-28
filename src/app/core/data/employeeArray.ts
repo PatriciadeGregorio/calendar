@@ -5,7 +5,7 @@ export const EMPLOYEE_ARRAY =
       firstName:"Pablo",
       lastName:"Caselas",
       manager:"Caselas",
-      events:[{from:'2020-08-06',to:'2020-08-07',type:'vacation'},{from:'2020-08-20',to:'2020-08-23',type:'maternity_leave'}]
+      events:[{from:'2021-08-27',to:'2021-08-30',type:'vacation'},{from:'2021-09-20',to:'2021-09-24',type:'maternity_leave'}]
     },{
       _id:"2",
       firstName:"Juan",

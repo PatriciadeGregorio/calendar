@@ -2,7 +2,6 @@ import * as moment from 'moment';
 import * as _ from 'underscore';
 import { Week } from './Week';
 
-
 export class WeekCalendar {
     private today = moment();
     private currentDay = this.today.clone();
@@ -73,7 +72,7 @@ export class WeekCalendar {
             .pluck('days')
             .flatten().value();
         return days;
-    }
+    }  
 
 
 }

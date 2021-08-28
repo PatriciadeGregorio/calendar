@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 import { EMPLOYEE_ARRAY } from 'src/app/core/data/employeeArray';
 import { IEmployee } from '../../models/employee.model';
+import { MomentUtilsService } from '../../services/moment-utils.service';
 import { WeekCalendar } from '../../weekCalendar';
 
 @Component({
@@ -14,13 +15,13 @@ export class EventsComponent implements OnInit {
   private employees: Array<IEmployee> = [];
   public displayedColumns = this.mapColumns();
   private genericData = Object.fromEntries(
-    this.displayedColumns.map(elem => [elem, '1']),
+    this.displayedColumns.map(elem => [elem, ' ']),
     );
   private data = this.buildData();
   public dataSource = new TableVirtualScrollDataSource(this.data);
 
 
-  constructor() { }
+  constructor(private readonly momentUtilsService: MomentUtilsService) { }
 
   ngOnInit(): void {
   }
@@ -31,7 +32,7 @@ export class EventsComponent implements OnInit {
   }
 
   private loadEmployees(): void {
-    for (let i=1; i <= 1000; i++){
+    for (let i = 1; i <= 1000; i++){
       this.employees = this.employees.concat(EMPLOYEE_ARRAY);
     }
     this.employees = this.employees.map((emp,i) => ({...emp, _id: i.toString()} ));
@@ -40,10 +41,23 @@ export class EventsComponent implements OnInit {
   private buildData(): Array<any> {
     this.loadEmployees();
     const data = [];
-    this.employees.forEach(({firstName, lastName})=> {
-      data.push({...this.genericData, fullname: `${firstName} ${lastName}`});
+    this.employees.forEach(({firstName, lastName, _id})=> {
+      data.push({...this.genericData, fullname: `${firstName} ${lastName}`, id: _id});
     });
-  return data;
+    return data;
+  }
+
+  public isWeekend(date: string): boolean {
+    return this.momentUtilsService.isWeekend(date);
+  }
+
+  public isToday(date: string): boolean {
+    return this.momentUtilsService.isToday(date);
+  }
+
+  public isEvent(element): boolean {
+    console.log(element);
+    return false;
   }
 
 }
