@@ -1,9 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
+import { CONSTANTS } from 'src/app/core/constants';
 import { EMPLOYEE_ARRAY } from 'src/app/core/data/employeeArray';
-import { IEmployee } from '../../models/employee.model';
+import { AddEventDialogComponent } from '../../dialogs/add-event-dialog/add-event-dialog.component';
+import { IEmployee, IEvent } from '../../models/employee.model';
 import { MomentUtilsService } from '../../services/moment-utils.service';
 import { WeekCalendar } from '../../weekCalendar';
+
+interface IData {
+  fullname: string;
+  id: string;
+  [key: string]: string; // Labels with dates
+}
 
 @Component({
   selector: 'app-events',
@@ -13,36 +22,36 @@ import { WeekCalendar } from '../../weekCalendar';
 export class EventsComponent implements OnInit {
   private calendar: WeekCalendar = new WeekCalendar();
   private employees: Array<IEmployee> = [];
-  public displayedColumns = this.mapColumns();
-  private genericData = Object.fromEntries(
+  public displayedColumns: Array<string> = this.mapColumns();
+  private genericData: { [key: string]: string } = Object.fromEntries(
     this.displayedColumns.map(elem => [elem, ' ']),
-    );
-  private data = this.buildData();
-  public dataSource = new TableVirtualScrollDataSource(this.data);
+  );
+  private data: Array<IData> = this.buildData();
+  public dataSource: TableVirtualScrollDataSource<IData> = new TableVirtualScrollDataSource(this.data);
 
 
-  constructor(private readonly momentUtilsService: MomentUtilsService) { }
+  constructor(private readonly momentUtilsService: MomentUtilsService, private readonly dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
 
   private mapColumns(): Array<string> {
     const columns: Array<string> = this.calendar.flattenDays().map(elem => elem.format('YYYY-MM-DD'));
-    return ['fullname', ...columns];
+    return [CONSTANTS.FULLNAME_COLUMN, ...columns];
   }
 
   private loadEmployees(): void {
-    for (let i = 1; i <= 1000; i++){
-      this.employees = this.employees.concat(EMPLOYEE_ARRAY);
-    }
-    this.employees = this.employees.map((emp,i) => ({...emp, _id: i.toString()} ));
+    // for (let i = 1; i <= 1000; i++){
+    this.employees = this.employees.concat(EMPLOYEE_ARRAY);
+    // }
+    this.employees = this.employees.map((emp, i) => ({ ...emp, _id: i.toString() }));
   }
 
-  private buildData(): Array<any> {
+  private buildData(): Array<IData> {
     this.loadEmployees();
     const data = [];
-    this.employees.forEach(({firstName, lastName, _id})=> {
-      data.push({...this.genericData, fullname: `${firstName} ${lastName}`, id: _id});
+    this.employees.forEach(({ firstName, lastName, _id }) => {
+      data.push({ ...this.genericData, fullname: `${firstName} ${lastName}`, id: _id });
     });
     return data;
   }
@@ -55,9 +64,34 @@ export class EventsComponent implements OnInit {
     return this.momentUtilsService.isToday(date);
   }
 
-  public isEvent(element): boolean {
-    console.log(element);
-    return false;
+  public isEvent({ id }: { id: string }, date: string): boolean {
+    let found: boolean = false; // TO-DO: Refactor this
+    const employee: IEmployee = this.employees.find(empl => empl._id === id);
+    found = false;
+    employee.events.forEach((event: IEvent) => {
+      if (this.momentUtilsService.inRange(event.from, event.to, date)) {
+        found = true;
+        return true;
+      }
+    });
+    return found;
+  }
+
+  public showAddShift(element: IData, column: string): boolean {
+    const isWeekend: boolean = this.isWeekend(column);
+    const isToday: boolean = this.isToday(column);
+    const isEvent: boolean = this.isEvent(element, column);
+    if (column === CONSTANTS.FULLNAME_COLUMN) {
+      return false;
+    }
+    if (isWeekend || isToday || isEvent) {
+      return false;
+    }
+    return true;
+  }
+
+  public openDialog(): void {
+    this.dialog.open(AddEventDialogComponent);
   }
 
 }

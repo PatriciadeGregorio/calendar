@@ -1,4 +1,4 @@
-interface IEvent {
+export interface IEvent {
     from: string;
     to: string;
     type: string;

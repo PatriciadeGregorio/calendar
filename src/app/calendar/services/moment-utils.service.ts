@@ -17,9 +17,12 @@ export class MomentUtilsService {
     return day === 6 || day === 7;
   }
 
-  public inRange(from, to): boolean {
-    var fromRange = moment().isSame(from, 'day') || moment().isAfter(from, 'day');
-    var toRange = moment().isSame(to, 'day') || moment().isBefore(to, 'day');
-    return fromRange && toRange;
+  public inRange(from: string, to: string, date: string): boolean {
+    if (moment(date).isValid()) {
+      const fromRange: boolean = moment(date).isSame(from, 'day') || moment(date).isAfter(from, 'day');
+      const toRange: boolean = moment(date).isSame(to, 'day') || moment(date).isBefore(to, 'day');
+      return fromRange && toRange;
+    }
+    return false;
   }
 }

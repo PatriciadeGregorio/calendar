@@ -60,3 +60,17 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   background-color: #99fa42;
   border: 1px solid #65d006;
 }
+
+.add-shift {
+  color: #ccc;
+  padding: 1em;
+  border: 1px dashed #ccc;
+  cursor: pointer;
+  border-radius: 4px;
+  opacity: 0;
+}
+
+.add-shift:hover {
+  opacity: 1;
+}
+

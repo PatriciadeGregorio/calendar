@@ -5,13 +5,13 @@ export const EMPLOYEE_ARRAY =
       firstName:"Pablo",
       lastName:"Caselas",
       manager:"Caselas",
-      events:[{from:'2021-08-27',to:'2021-08-30',type:'vacation'},{from:'2021-09-20',to:'2021-09-24',type:'maternity_leave'}]
+      events:[{from:'2021-09-02',to:'2021-09-04',type:'maternity_leave'}, {from:'2021-08-27',to:'2021-08-30',type:'vacation'}]
     },{
       _id:"2",
       firstName:"Juan",
       lastName:"Rodríguez",
       manager:"Caselas",
-      events:[{from:'2020-08-06',to:'2020-08-08',type:'sickness_leave'},{from:'2020-08-20',to:'2020-08-23',type:'sickness_leave'}]
+      events:[{from:'2021-09-06',to:'2021-09-16',type:'sickness_leave'},{from:'2021-08-20',to:'2021-08-27',type:'sickness_leave'}]
     },{
       _id:"3",
       firstName:"Pedro",
