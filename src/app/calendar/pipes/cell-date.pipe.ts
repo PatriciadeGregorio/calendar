@@ -6,7 +6,7 @@ import * as moment from 'moment';
 })
 export class CellDatePipe implements PipeTransform {
 
-  transform(value: string): any {
+  transform(value: string): string | null {
     const isValidDate: boolean = moment(value).isValid();
     if (isValidDate) {
       return `<div> ${moment(value).format('ddd')} </div> <div> ${moment(value).format('DD/MM')} </div>`;

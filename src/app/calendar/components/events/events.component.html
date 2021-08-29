@@ -4,22 +4,29 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-    <!-- <ng-container matColumnDef="fullname" sticky>
-      <th mat-header-cell
-          *matHeaderCellDef
-          class="col-sm">No.</th>
-      <td mat-cell
-          *matCellDef="let element"
-          class="col-sm">{{element.fullname}}</td>
-    </ng-container> -->
 
-    <ng-container [matColumnDef]="item" *ngFor="let item of displayedColumns; let i = index"
+    <ng-container matColumnDef="fullname" sticky>
+      <th mat-header-cell *matHeaderCellDef class="col-sm">
+        <form #searchForm="ngForm">
+          <div className="search-employee-wrapper">
+            <i className="fa fa-search"></i>
+            <input type="text" [(ngModel)]="employee" name="employee" class="search-employee"
+              placeholder="Buscar empleado" (ngModelChange)="searchEmployees(searchForm.value.employee)" />
+          </div>
+        </form>
+      </th>
+      <td mat-cell *matCellDef="let element" class="col-sm">{{element.fullname}}</td>
+    </ng-container>
+
+
+
+    <ng-container [matColumnDef]="item" *ngFor="let item of displayedColumns | slice; let i = index"
       [sticky]="item === 'fullname'">
       <th mat-header-cell *matHeaderCellDef [innerHTML]=" item | cellDate "></th>
       <td mat-cell *matCellDef="let element" [class.soft-cyan]="isToday(item)" [class.bluish-grey]="isWeekend(item)"
         [class.bright-green]="isEvent(element, item)">
-       {{ element[item]}}
-       <i *ngIf="showAddShift(element, item)" (click)="openDialog()" class="add-shift fa fa-plus"></i>
+        {{ element[item]}}
+        <i *ngIf="showAddShift(element, item)" (click)="openDialog()" class="add-shift fa fa-plus"></i>
       </td>
     </ng-container>
 

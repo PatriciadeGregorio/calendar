@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 import { CONSTANTS } from 'src/app/core/constants';
@@ -7,8 +8,9 @@ import { AddEventDialogComponent } from '../../dialogs/add-event-dialog/add-even
 import { IEmployee, IEvent } from '../../models/employee.model';
 import { MomentUtilsService } from '../../services/moment-utils.service';
 import { WeekCalendar } from '../../weekCalendar';
+import * as _ from 'underscore';
 
-interface IData {
+export interface IData {
   fullname: string;
   id: string;
   [key: string]: string; // Labels with dates
@@ -28,7 +30,10 @@ export class EventsComponent implements OnInit {
   );
   private data: Array<IData> = this.buildData();
   public dataSource: TableVirtualScrollDataSource<IData> = new TableVirtualScrollDataSource(this.data);
-
+  public dataSourceToSearch: TableVirtualScrollDataSource<IData> = new TableVirtualScrollDataSource(this.data);
+  public searchForm = {
+    employee: ''
+  };
 
   constructor(private readonly momentUtilsService: MomentUtilsService, private readonly dialog: MatDialog) { }
 
@@ -42,7 +47,7 @@ export class EventsComponent implements OnInit {
 
   private loadEmployees(): void {
     // for (let i = 1; i <= 1000; i++){
-    this.employees = this.employees.concat(EMPLOYEE_ARRAY);
+      this.employees = this.employees.concat(EMPLOYEE_ARRAY);
     // }
     this.employees = this.employees.map((emp, i) => ({ ...emp, _id: i.toString() }));
   }
@@ -65,13 +70,11 @@ export class EventsComponent implements OnInit {
   }
 
   public isEvent({ id }: { id: string }, date: string): boolean {
-    let found: boolean = false; // TO-DO: Refactor this
+    let found: boolean = false;
     const employee: IEmployee = this.employees.find(empl => empl._id === id);
-    found = false;
     employee.events.forEach((event: IEvent) => {
       if (this.momentUtilsService.inRange(event.from, event.to, date)) {
         found = true;
-        return true;
       }
     });
     return found;
@@ -92,6 +95,14 @@ export class EventsComponent implements OnInit {
 
   public openDialog(): void {
     this.dialog.open(AddEventDialogComponent);
+  }
+
+  public searchEmployees(newSearch: string): void {
+    const dataSourceCopy: Array<IData> = _.clone(this.dataSourceToSearch.data);
+    const newSearching: Array<IData> = dataSourceCopy.filter(data => {
+      return data.fullname.toLocaleLowerCase().includes(newSearch.toLocaleLowerCase())
+    });
+    this.dataSource.data = newSearching;
   }
 
 }

@@ -9,6 +9,8 @@ import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
 import { CellDatePipe } from './pipes/cell-date.pipe';
 import { AddEventDialogComponent } from './dialogs/add-event-dialog/add-event-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
+import { SlicePipe } from './pipes/slice.pipe';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -16,10 +18,12 @@ import { MatButtonModule } from '@angular/material/button';
   declarations: [
     EventsComponent,
     CellDatePipe,
-    AddEventDialogComponent
+    AddEventDialogComponent,
+    SlicePipe
   ],
   imports: [
     CommonModule,
+    FormsModule,
     CalendarRoutingModule,
     ScrollingModule,
     TableVirtualScrollModule,
