@@ -1,23 +1,46 @@
-# ignore everything in the root except the "wp-content" directory.
-!wp-content/
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# ignore everything in the "wp-content" directory, except:
-# "mu-plugins", "plugins", "themes" directory
-wp-content/*
-!wp-content/mu-plugins/
-!wp-content/plugins/
-!wp-content/themes/
+# compiled output
+/dist
+/tmp
+/out-tsc
+# Only exists if Bazel was run
+/bazel-out
 
-# ignore these plugins
-wp-content/plugins/hello.php
+# dependencies
+/node_modules
 
-# ignore specific themes
-wp-content/themes/twenty*/
+# profiling files
+chrome-profiler-events*.json
+speed-measure-plugin*.json
 
-# ignore node dependency directories
-node_modules/
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
-# ignore log files and databases
-*.log
-*.sql
-*.sqlite
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
